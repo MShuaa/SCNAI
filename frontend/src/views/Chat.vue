@@ -104,10 +104,10 @@ export default {
     const messagesContainer = ref(null)
 
     const suggestions = ref([
-      '什么是人工智能？',
-      '如何训练神经网络？',
-      '解释一下机器学习',
-      '计算机视觉的应用'
+      '丝瓜白粉病的症状和防治方法',
+      '如何预防植物病虫害？',
+      '植物叶片发黄是什么原因？',
+      '有机农业病虫害防治技巧'
     ])
 
     const scrollToBottom = () => {
