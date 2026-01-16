@@ -255,7 +255,7 @@ public class RecognitionService {
     private RecognitionResponse buildResponse(RecognitionRecord record, Map<String, BigDecimal> predictions) {
         RecognitionResponse response = new RecognitionResponse();
         response.setId(record.getId());
-        response.setDiseaseType(DISEASE_MAP.getOrDefault(record.getDiseaseType(), "未知"));
+        response.setDiseaseType(record.getDiseaseType());
         response.setDiseaseTypeName(record.getDiseaseTypeName());
         response.setConfidence(record.getConfidence());
         response.setSeverity(record.getSeverity());
