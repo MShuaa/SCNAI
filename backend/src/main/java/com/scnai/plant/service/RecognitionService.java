@@ -116,7 +116,7 @@ public class RecognitionService {
         record.setPlantName("丝瓜");
         record.setImageUrl(imageUrl);
         record.setDiseaseType(diseaseType);
-        record.setDiseaseTypeName(DISEASE_MAP.getOrDefault(diseaseType, "未知"));
+        record.setDiseaseTypeName(diseaseType);
         record.setConfidence(confidence);
         record.setSeverity(severity);
         record.setArea(area);
@@ -235,7 +235,7 @@ public class RecognitionService {
      * 判断严重程度
      */
     private String determineSeverity(BigDecimal confidence, String diseaseType) {
-        if ("jiankang".equals(diseaseType)) {
+        if ("健康".equals(diseaseType)) {
             return "健康";
         }
 

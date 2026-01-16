@@ -37,8 +37,8 @@
               <h4>基础信息</h4>
               <div class="info-grid">
                 <div><strong>ID:</strong> {{ record.id }}</div>
-                <div><strong>植物:</strong> {{ record.plant_name }}</div>
-                <div><strong>病虫害:</strong> {{ record.disease_type_name }}</div>
+                <div><strong>植物:</strong> {{ record.plantName || record.plant_name || '丝瓜' }}</div>
+                <div><strong>病虫害:</strong> {{ record.diseaseTypeName || record.disease_type_name || '-' }}</div>
                 <div><strong>置信度:</strong> {{ formatConfidence(record.confidence) }}</div>
                 <div><strong>严重程度:</strong> <span :class="getSeverityClass(record.severity)">{{ record.severity }}</span></div>
               </div>
@@ -48,30 +48,29 @@
             <div class="info-group">
               <h4>位置 & 时间</h4>
               <div class="info-grid">
-                <div><strong>区域:</strong> {{ record.area || '未指定' }}</div>
-                <div v-if="record.location_lat && record.location_lng">
-                  <strong>经纬度:</strong> {{ record.location_lat.toFixed(4) }}, {{ record.location_lng.toFixed(4) }}
+                <div v-if="(record.locationLat || record.location_lat) && (record.locationLng || record.location_lng)">
+                  <strong>经纬度:</strong> {{ (record.locationLat || record.location_lat).toFixed(4) }}, {{ (record.locationLng || record.location_lng).toFixed(4) }}
                 </div>
-                <div><strong>识别时间:</strong> {{ formatDateTime(record.identify_time) }}</div>
-                <div><strong>创建时间:</strong> {{ formatDateTime(record.created_at) }}</div>
+                <div><strong>识别时间:</strong> {{ formatDateTime(record.identifyTime || record.identify_time) }}</div>
+                <div><strong>创建时间:</strong> {{ formatDateTime(record.createdAt || record.created_at) }}</div>
               </div>
             </div>
 
             <!-- 症状处理 -->
-            <div class="info-group" v-if="record.symptoms || record.treatment_plan">
+            <div class="info-group" v-if="record.symptoms || (record.treatmentPlan || record.treatment_plan)">
               <h4>诊断信息</h4>
               <div v-if="record.symptoms" class="text-block">
                 <strong>症状:</strong> {{ record.symptoms }}
               </div>
-              <div v-if="record.treatment_plan" class="text-block">
-                <strong>处理方案:</strong> {{ record.treatment_plan }}
+              <div v-if="record.treatmentPlan || record.treatment_plan" class="text-block">
+                <strong>处理方案:</strong> {{ record.treatmentPlan || record.treatment_plan }}
               </div>
             </div>
 
             <!-- 图片 -->
-            <div class="info-group" v-if="record.image_url">
+            <div class="info-group" v-if="record.imageUrl || record.image_url">
               <h4>识别图片</h4>
-              <img :src="record.image_url" :alt="record.disease_type_name" class="detail-image" />
+              <img :src="record.imageUrl || record.image_url" :alt="record.diseaseTypeName || record.disease_type_name" class="detail-image" />
             </div>
           </div>
         </div>
