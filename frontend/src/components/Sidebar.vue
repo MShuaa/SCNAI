@@ -32,6 +32,10 @@
         <i class="fas fa-user"></i>
         <span>个人信息</span>
       </router-link>
+      <router-link to="/about" class="sidebar-menu-item" :class="{ active: $route.name === 'About' }">
+        <i class="fas fa-info-circle"></i>
+        <span>帮助/关于</span>
+      </router-link>
       <a href="#" @click.prevent="handleLogout" class="sidebar-menu-item">
         <i class="fas fa-sign-out-alt"></i>
         <span>退出登录</span>
