@@ -67,9 +67,9 @@ const mockAuthService = {
   }
 }
 
-// 根据环境变量或开发模式决定使用真实API还是mock
-// 开发模式（import.meta.env.DEV）默认启用 mock，便于本地前端联调
-const isMockAuth = (import.meta.env.VITE_MOCK_AUTH === 'true') || import.meta.env.DEV
+// 根据环境变量决定使用真实API还是mock
+// 只有明确设置 VITE_MOCK_AUTH=true 时才使用mock
+const isMockAuth = import.meta.env.VITE_MOCK_AUTH === 'true'
 
 export const authService = isMockAuth ? mockAuthService : {
   async login(username, password, remember) {

@@ -116,7 +116,7 @@ public class RecognitionService {
         record.setPlantName("丝瓜");
         record.setImageUrl(imageUrl);
         record.setDiseaseType(diseaseType);
-        record.setDiseaseTypeName(DISEASE_MAP.getOrDefault(diseaseType, "未知"));
+        record.setDiseaseTypeName(diseaseType);
         record.setConfidence(confidence);
         record.setSeverity(severity);
         record.setArea(area);
@@ -235,7 +235,7 @@ public class RecognitionService {
      * 判断严重程度
      */
     private String determineSeverity(BigDecimal confidence, String diseaseType) {
-        if ("jiankang".equals(diseaseType)) {
+        if ("健康".equals(diseaseType)) {
             return "健康";
         }
 
@@ -255,7 +255,7 @@ public class RecognitionService {
     private RecognitionResponse buildResponse(RecognitionRecord record, Map<String, BigDecimal> predictions) {
         RecognitionResponse response = new RecognitionResponse();
         response.setId(record.getId());
-        response.setDiseaseType(DISEASE_MAP.getOrDefault(record.getDiseaseType(), "未知"));
+        response.setDiseaseType(record.getDiseaseType());
         response.setDiseaseTypeName(record.getDiseaseTypeName());
         response.setConfidence(record.getConfidence());
         response.setSeverity(record.getSeverity());

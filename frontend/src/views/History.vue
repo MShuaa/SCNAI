@@ -44,10 +44,10 @@
             </thead>
             <tbody>
               <tr v-for="record in sortedRecords" :key="record.id">
-                <td>{{ formatDateTime(record.identify_time || record.created_at) }}</td>
-                <td>{{ record.plant_name }}</td>
-                <td>{{ record.disease_type_name }}</td>
-                <td><span :class="getSeverityClass(record.severity)">{{ record.severity }}</span></td>
+                <td>{{ formatDateTime(record.identify_time || record.identifyTime || record.created_at || record.createdAt) }}</td>
+                <td>{{ record.plant_name || record.plantName || '丝瓜' }}</td>
+                <td>{{ record.disease_type_name || record.diseaseTypeName || '-' }}</td>
+                <td><span :class="getSeverityClass(record.severity)">{{ record.severity || '-' }}</span></td>
                 <td>{{ formatConfidence(record.confidence) }}</td>
                 <td><button class="btn btn-sm btn-secondary" @click="viewDetail(record.id)">详情</button></td>
               </tr>
@@ -66,7 +66,6 @@ import ParticlesBackground from '@/components/ParticlesBackground.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/stores/auth'
 import { recordService } from '@/services/record'
-import { ElMessage } from 'element-plus'
 
 export default {
   name: 'History',
@@ -81,22 +80,35 @@ export default {
 
     // 按时间排序的计算属性
     const sortedRecords = computed(() => {
-      return records.value.sort((a, b) => new Date(b.identify_time || b.created_at) - new Date(a.identify_time || a.created_at))
+      return [...records.value].sort((a, b) => {
+        const timeA = new Date(a.identify_time || a.identifyTime || a.created_at || a.createdAt)
+        const timeB = new Date(b.identify_time || b.identifyTime || b.created_at || b.createdAt)
+        return timeB - timeA
+      })
     })
 
     const loadData = async () => {
       loading.value = true
       try {
-        const response = await recordService.getRecords()
+        const response = await recordService.getRecords({ page: 1, pageSize: 100 })
+        console.log('识别历史完整响应:', JSON.stringify(response, null, 2))
+
         if (response.success) {
-          records.value = response.data.records || []
+          // 处理不同的数据结构
+          records.value = response.data?.records || response.data?.list || response.data || []
+          console.log('解析后的记录数量:', records.value.length)
+          if (records.value.length > 0) {
+            console.log('第一条记录示例:', JSON.stringify(records.value[0], null, 2))
+            console.log('第一条记录的字段名:', Object.keys(records.value[0]))
+          }
         } else {
-          ElMessage.error(response.message || '获取识别历史失败')
+          console.error('获取识别历史失败:', response.error || response.message)
+          alert(response.error || response.message || '获取识别历史失败')
           records.value = []
         }
       } catch (error) {
         console.error('获取识别历史失败:', error)
-        ElMessage.error('获取识别历史失败，请稍后重试')
+        alert('获取识别历史失败，请稍后重试')
         records.value = []
       } finally {
         loading.value = false
@@ -104,7 +116,9 @@ export default {
     }
 
     const formatDateTime = (dateString) => {
+      if (!dateString) return '-'
       const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
       return date.toLocaleString('zh-CN', {
         year: 'numeric',
         month: '2-digit',
@@ -131,7 +145,7 @@ export default {
       router.push({ name: 'Visualization', params: { recordId } })
     }
 
-    const exportData = () => ElMessage.info('导出功能开发中...')
+    const exportData = () => alert('导出功能开发中...')
 
     onMounted(loadData)
 
