@@ -41,6 +41,18 @@ const routes = [
     name: 'Profile',
     component: () => import('@/views/Profile.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: () => import('@/views/History.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/atlas',
+    name: 'Atlas',
+    component: () => import('@/views/Atlas.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 

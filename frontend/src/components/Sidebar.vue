@@ -20,9 +20,17 @@
         <i class="fas fa-camera"></i>
         <span>图像识别</span>
       </router-link>
+      <router-link to="/history" class="sidebar-menu-item" :class="{ active: $route.name === 'History' }">
+        <i class="fas fa-history"></i>
+        <span>识别历史</span>
+      </router-link>
       <router-link to="/chat" class="sidebar-menu-item" :class="{ active: $route.name === 'Chat' }">
         <i class="fas fa-comments"></i>
         <span>智能问答</span>
+      </router-link>
+      <router-link to="/atlas" class="sidebar-menu-item" :class="{ active: $route.name === 'Atlas' }">
+        <i class="fas fa-leaf"></i>
+        <span>植物图鉴</span>
       </router-link>
       <router-link to="/profile" class="sidebar-menu-item" :class="{ active: $route.name === 'Profile' }">
         <i class="fas fa-user"></i>
