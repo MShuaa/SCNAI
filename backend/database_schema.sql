@@ -78,7 +78,6 @@ CREATE TABLE `recognition_records` (
   `area` VARCHAR(50) DEFAULT NULL COMMENT '区域',
   `location_lat` DECIMAL(10,7) DEFAULT NULL COMMENT '纬度',
   `location_lng` DECIMAL(10,7) DEFAULT NULL COMMENT '经度',
-  `status` VARCHAR(20) DEFAULT '未处理' COMMENT '处理状态：未处理/处理中/已处理',
   `symptoms` TEXT DEFAULT NULL COMMENT '症状描述',
   `treatment_plan` TEXT DEFAULT NULL COMMENT '处理方案',
   `identify_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '识别时间',

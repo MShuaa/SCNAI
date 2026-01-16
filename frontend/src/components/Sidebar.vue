@@ -12,10 +12,6 @@
         <i class="fas fa-gauge-simple"></i>
         <span>主控制台</span>
       </router-link>
-      <router-link to="/visualization" class="sidebar-menu-item" :class="{ active: $route.name === 'Visualization' }">
-        <i class="fas fa-chart-bar"></i>
-        <span>数据可视化</span>
-      </router-link>
       <router-link to="/recognition" class="sidebar-menu-item" :class="{ active: $route.name === 'Recognition' }">
         <i class="fas fa-camera"></i>
         <span>图像识别</span>

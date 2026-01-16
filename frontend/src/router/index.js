@@ -25,7 +25,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/visualization',
+    path: '/visualization/:recordId?',
     name: 'Visualization',
     component: () => import('@/views/Visualization.vue'),
     meta: { requiresAuth: true }
