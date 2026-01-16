@@ -1,0 +1,252 @@
+/* 登录页面样式 */
+
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #172a45;
+    border-radius: 12px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.login-header {
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #0a192f 0%, #172a45 100%);
+    text-align: center;
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.login-logo img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: #a8b2d1;
+}
+
+.login-body {
+    padding: 30px 20px;
+}
+
+.login-footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #2d3748;
+}
+
+.login-footer-text {
+    font-size: 14px;
+    color: #a8b2d1;
+}
+
+.login-footer-link {
+    color: #64ffda;
+    text-decoration: none;
+}
+
+.login-footer-link:hover {
+    text-decoration: underline;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #64ffda;
+    background-color: rgba(255, 255, 255, 0.15);
+    animation: pulse 0.5s ease-in-out;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* 记住我和忘记密码样式 */
+.form-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.form-remember {
+    display: flex;
+    align-items: center;
+}
+
+.form-remember input[type="checkbox"] {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.form-remember input[type="checkbox"]:checked {
+    background-color: #64ffda;
+    border-color: #64ffda;
+}
+
+.form-remember label {
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.form-remember label:hover {
+    color: #64ffda;
+}
+
+.form-forgot {
+    color: #64ffda;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.form-forgot:hover {
+    color: #ffffff;
+    background-color: rgba(100, 255, 218, 0.1);
+    text-decoration: none;
+}
+
+/* 登录按钮样式 */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #64ffda;
+    border: none;
+    border-radius: 6px;
+    color: #0a192f;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-login:hover:not(:disabled) {
+    background-color: #4fd1c5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.btn-login:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 登录表单动画 */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 0 10px;
+    }
+
+    .login-header {
+        padding: 20px 10px;
+    }
+
+    .login-body {
+        padding: 20px 10px;
+    }
+}
+
+/* 错误提示样式 */
+.error-message {
+    padding: 10px 15px;
+    background-color: rgba(245, 101, 101, 0.2);
+    color: #f56565;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 成功提示样式 */
+.success-message {
+    padding: 10px 15px;
+    background-color: rgba(72, 187, 120, 0.2);
+    color: #48bb78;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    display: none;
+}
+
+.success-message.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
