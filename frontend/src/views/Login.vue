@@ -86,10 +86,11 @@ export default {
 
       try {
         const response = await authService.login(username.value, password.value, remember.value)
-        
+
         if (response.success) {
-          authStore.setAuth(response.token, response.user)
-          
+          // 后端返回的数据结构是 { success: true, data: { token, user } }
+          authStore.setAuth(response.data.token, response.data.user)
+
           // 保存记住密码选项
           localStorage.setItem('rememberMe', remember.value)
           if (remember.value) {
@@ -102,11 +103,11 @@ export default {
           const redirect = route.query.redirect || '/dashboard'
           router.push(redirect)
         } else {
-          errorMessage.value = response.message || '用户名或密码错误'
+          errorMessage.value = response.error || '用户名或密码错误'
         }
       } catch (error) {
         console.error('登录错误:', error)
-        errorMessage.value = error.response?.data?.message || '登录失败，请稍后重试'
+        errorMessage.value = error.response?.data?.error || '登录失败，请稍后重试'
       } finally {
         loading.value = false
       }
