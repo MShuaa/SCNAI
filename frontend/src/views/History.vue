@@ -19,18 +19,11 @@
           <div class="card-icon"><i class="fas fa-history"></i></div>
         </div>
 
-        <!-- 筛选条件 -->
+        <!-- 操作按钮 -->
         <div style="padding: 20px; border-bottom: 1px solid #2d3748;">
-          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <el-select v-model="statusFilter" placeholder="处理状态" @change="loadData" style="width: 120px;">
-              <el-option label="全部" value="" />
-              <el-option label="未处理" value="未处理" />
-              <el-option label="已处理" value="已处理" />
-            </el-select>
-            <button class="btn btn-secondary" @click="exportData">
-              <i class="fas fa-download"></i> 导出
-            </button>
-          </div>
+          <button class="btn btn-secondary" @click="exportData">
+            <i class="fas fa-download"></i> 导出
+          </button>
         </div>
 
         <!-- 历史记录表格 -->
@@ -46,16 +39,17 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>时间</th><th>病虫害</th><th>置信度</th><th>状态</th><th>操作</th>
+                <th>时间</th><th>植物</th><th>病虫害</th><th>严重程度</th><th>置信度</th><th>操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="record in records" :key="record.id">
-                <td>{{ formatDate(record.created_at) }}</td>
-                <td>{{ record.disease_name }}</td>
-                <td>{{ record.confidence }}%</td>
-                <td><span class="badge" :class="getStatusClass(record.status)">{{ record.status }}</span></td>
-                <td><button class="btn btn-sm btn-secondary" @click="viewDetail(record)">详情</button></td>
+              <tr v-for="record in sortedRecords" :key="record.id">
+                <td>{{ formatDateTime(record.identify_time || record.created_at) }}</td>
+                <td>{{ record.plant_name }}</td>
+                <td>{{ record.disease_type_name }}</td>
+                <td><span :class="getSeverityClass(record.severity)">{{ record.severity }}</span></td>
+                <td>{{ formatConfidence(record.confidence) }}</td>
+                <td><button class="btn btn-sm btn-secondary" @click="viewDetail(record.id)">详情</button></td>
               </tr>
             </tbody>
           </table>
@@ -67,45 +61,81 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import ParticlesBackground from '@/components/ParticlesBackground.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/stores/auth'
+import { recordService } from '@/services/record'
 import { ElMessage } from 'element-plus'
 
 export default {
   name: 'History',
   components: { ParticlesBackground, Sidebar },
   setup() {
+    const router = useRouter()
     const authStore = useAuthStore()
     const user = computed(() => authStore.user)
 
     const loading = ref(true)
     const records = ref([])
-    const statusFilter = ref('')
 
-    // 模拟数据 - 等待后端实现后移除
-    const mockData = [
-      { id: 1, created_at: '2024-01-15', disease_name: '白粉病', confidence: 85, status: '未处理' },
-      { id: 2, created_at: '2024-01-14', disease_name: '炭疽病', confidence: 92, status: '已处理' },
-      { id: 3, created_at: '2024-01-13', disease_name: '病毒病', confidence: 78, status: '未处理' }
-    ]
+    // 按时间排序的计算属性
+    const sortedRecords = computed(() => {
+      return records.value.sort((a, b) => new Date(b.identify_time || b.created_at) - new Date(a.identify_time || a.created_at))
+    })
 
     const loadData = async () => {
       loading.value = true
-      await new Promise(resolve => setTimeout(resolve, 500)) // 模拟加载
-      records.value = statusFilter.value ? mockData.filter(r => r.status === statusFilter.value) : mockData
-      loading.value = false
+      try {
+        const response = await recordService.getRecords()
+        if (response.success) {
+          records.value = response.data.records || []
+        } else {
+          ElMessage.error(response.message || '获取识别历史失败')
+          records.value = []
+        }
+      } catch (error) {
+        console.error('获取识别历史失败:', error)
+        ElMessage.error('获取识别历史失败，请稍后重试')
+        records.value = []
+      } finally {
+        loading.value = false
+      }
     }
 
-    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('zh-CN')
-    const getStatusClass = (status) => status === '已处理' ? 'badge-success' : 'badge-danger'
+    const formatDateTime = (dateString) => {
+      const date = new Date(dateString)
+      return date.toLocaleString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
 
-    const viewDetail = (record) => ElMessage.info('详情查看功能开发中...')
+    const formatConfidence = (confidence) => {
+      if (confidence === null || confidence === undefined) return '0.0%'
+      const value = typeof confidence === 'string' ? parseFloat(confidence) : confidence
+      return (value * 100).toFixed(1) + '%'
+    }
+
+    const getSeverityClass = (severity) => {
+      if (severity === '重度') return 'badge badge-danger'
+      if (severity === '中度') return 'badge badge-warning'
+      return 'badge badge-success'
+    }
+
+    // 跳转到详情页面，传递记录ID
+    const viewDetail = (recordId) => {
+      router.push({ name: 'Visualization', params: { recordId } })
+    }
+
     const exportData = () => ElMessage.info('导出功能开发中...')
 
     onMounted(loadData)
 
-    return { user, loading, records, statusFilter, loadData, formatDate, getStatusClass, viewDetail, exportData }
+    return { user, loading, records, sortedRecords, loadData, formatDateTime, formatConfidence, getSeverityClass, viewDetail, exportData }
   }
 }
 </script>
