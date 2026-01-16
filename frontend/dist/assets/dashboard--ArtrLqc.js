@@ -1,0 +1,1 @@
+import{b as s}from"./auth-Bm6ta8Sy.js";const e={async getStats(){return(await s.get("/dashboard/stats")).data},async getActivities(){return(await s.get("/dashboard/activities")).data},async getRecords(){return(await s.get("/dashboard/records")).data}};export{e as d};
