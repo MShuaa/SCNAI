@@ -115,6 +115,7 @@ public class RecognitionService {
         record.setUserId(userId);
         record.setPlantName("丝瓜");
         record.setImageUrl(imageUrl);
+        record.setThumbnailUrl(imageUrl);
         record.setDiseaseType(diseaseType);
         record.setDiseaseTypeName(diseaseType);
         record.setConfidence(confidence);
@@ -264,6 +265,8 @@ public class RecognitionService {
         response.setSymptoms(record.getSymptoms());
         response.setTreatmentPlan(record.getTreatmentPlan());
         response.setRawPredictions(predictions);
+        response.setThumbnailUrl(record.getThumbnailUrl());
+        response.setImageUrl(record.getImageUrl());
         return response;
     }
 }
